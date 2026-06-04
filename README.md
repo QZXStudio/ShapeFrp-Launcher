@@ -6,7 +6,7 @@ FRP 内网穿透隧道启动器，支持管理 ShapeFrp 隧道和自定义隧道
 
 ```
 ShapeFrp-Launcher/
-├── AvaloniaApplication1/          # Main application (Avalonia + .NET 8)
+├── ShapeFrpLauncher/          # Main application (Avalonia + .NET 8)
 │   ├── Program.cs
 │   ├── App.axaml / .cs
 │   ├── MainWindow.axaml / .cs

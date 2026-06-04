@@ -35,7 +35,7 @@
 
 ## 项目文件结构
 ```
-AvaloniaApplication1/
+ShapeFrpLauncher/
   Program.cs              — 入口，STAThread
   App.axaml / .cs         — Application + FluentAvaloniaTheme
   MainWindow.axaml / .cs  — AppWindow + 顶栏（返回按钮）+ NavigationView

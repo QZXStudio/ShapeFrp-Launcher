@@ -10,7 +10,7 @@ Write-Host "=== QZXFrp 构建 ===" -ForegroundColor Cyan
 
 # 0. 先 publish
 Write-Host "`n[0/3] dotnet publish ..." -ForegroundColor Green
-dotnet publish "$Root\AvaloniaApplication1\AvaloniaApplication1.csproj" -c Release -r win-x64 --self-contained true -o $Publish -p:Version=$Ver
+dotnet publish "$Root\ShapeFrpLauncher\ShapeFrpLauncher.csproj" -c Release -r win-x64 --self-contained true -o $Publish -p:Version=$Ver
 if ($LASTEXITCODE -ne 0) { throw "Publish 失败" }
 
 # 1. 构建 MSI

@@ -78,7 +78,7 @@
     <ComponentGroup Id="StartMenuShortcuts" Directory="QZXFrpProgramsDir">
       <Component Id="AppShortcut" Bitness="always64">
         <Shortcut Name="QZXFrp"
-                  Target="[INSTALLFOLDER]AvaloniaApplication1.exe"
+                  Target="[INSTALLFOLDER]ShapeFrpLauncher.exe"
                   WorkingDirectory="INSTALLFOLDER" />
         <RegistryValue Root="HKCU"
                        Key="Software\QZX\QZXFrp"
@@ -95,7 +95,7 @@
     <ComponentGroup Id="DesktopShortcutComponents" Directory="DesktopFolder">
       <Component Id="DesktopShortcutComp" Bitness="always64">
         <Shortcut Name="QZXFrp"
-                  Target="[INSTALLFOLDER]AvaloniaApplication1.exe"
+                  Target="[INSTALLFOLDER]ShapeFrpLauncher.exe"
                   WorkingDirectory="INSTALLFOLDER" />
         <RegistryValue Root="HKCU"
                        Key="Software\QZX\QZXFrp"

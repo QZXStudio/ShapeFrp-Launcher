@@ -19,7 +19,7 @@
 
   <!-- 构建前先 publish 主项目 -->
   <Target Name="PublishMainApp" BeforeTargets="HarvestDirectory">
-    <Exec Command="dotnet publish &quot;$(MSBuildThisFileDirectory)..\AvaloniaApplication1\AvaloniaApplication1.csproj&quot; -c $(Configuration) -r win-x64 --self-contained true -o &quot;$(PublishRoot)&quot; -p:Version=$(Version)" />
+    <Exec Command="dotnet publish &quot;$(MSBuildThisFileDirectory)..\ShapeFrpLauncher\ShapeFrpLauncher.csproj&quot; -c $(Configuration) -r win-x64 --self-contained true -o &quot;$(PublishRoot)&quot; -p:Version=$(Version)" />
   </Target>
 
   <!-- WiX UI 扩展（FeatureTree 组件选择页） -->

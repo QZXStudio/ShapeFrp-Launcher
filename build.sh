@@ -19,7 +19,7 @@ fi
 
 VERSION="$(date +%Y.%m.%d)"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PROJECT_DIR="${SCRIPT_DIR}/AvaloniaApplication1"
+PROJECT_DIR="${SCRIPT_DIR}/ShapeFrpLauncher"
 PUBLISH_DIR="${SCRIPT_DIR}/publish/${RID}"
 DIST_DIR="${SCRIPT_DIR}/dist"
 
@@ -30,7 +30,7 @@ echo "  运行时: ${RID}"
 # ---- Publish ----
 echo ""
 echo "[1/2] dotnet publish ..."
-dotnet publish "${PROJECT_DIR}/AvaloniaApplication1.csproj" \
+dotnet publish "${PROJECT_DIR}/ShapeFrpLauncher.csproj" \
   -c Release -r "${RID}" --self-contained true \
   -o "${PUBLISH_DIR}" \
   -p:Version="${VERSION}"
@@ -65,7 +65,7 @@ case "${RID}" in
     # 启动脚本
     cat > "${BUILD_DIR}/usr/bin/${APP_NAME}" << 'EOF'
 #!/bin/bash
-exec /usr/share/qzxfrp/AvaloniaApplication1 "$@"
+exec /usr/share/qzxfrp/ShapeFrpLauncher "$@"
 EOF
     chmod 755 "${BUILD_DIR}/usr/bin/${APP_NAME}"
 
@@ -124,7 +124,7 @@ mkdir -p %{buildroot}/usr/share/applications
 cp -a * %{buildroot}/usr/share/%{name}/
 cat > %{buildroot}/usr/bin/%{name} << 'EOF'
 #!/bin/bash
-exec /usr/share/qzxfrp/AvaloniaApplication1 "\$@"
+exec /usr/share/qzxfrp/ShapeFrpLauncher "\$@"
 EOF
 chmod 755 %{buildroot}/usr/bin/%{name}
 cat > %{buildroot}/usr/share/applications/%{name}.desktop << EOF
@@ -169,7 +169,7 @@ SPECEOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
-  <key>CFBundleExecutable</key><string>AvaloniaApplication1</string>
+  <key>CFBundleExecutable</key><string>ShapeFrpLauncher</string>
   <key>CFBundleIdentifier</key><string>com.qzx.qzxfrp</string>
   <key>CFBundleName</key><string>${APP_NAME}</string>
   <key>CFBundleVersion</key><string>${VERSION}</string>
