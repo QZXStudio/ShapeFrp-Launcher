@@ -1,0 +1,78 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             mc:Ignorable="d"
+             x:Class="AvaloniaApplication1.Views.AboutView">
+
+    <Grid RowDefinitions="Auto,*">
+        <Border Grid.Row="0" Padding="32,24,32,12">
+            <StackPanel Spacing="2">
+                <TextBlock Text="关于" FontSize="20" FontWeight="SemiBold" />
+                <TextBlock Text="QZXFrp — FRP 内网隧道管理客户端"
+                           FontSize="13" Foreground="Gray" />
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Margin="16,0,32,32" Spacing="4">
+                <ui:SettingsExpander Header="QZXFrp" Description="版本 1.0.0 · 内部版本 20260602">
+                    <ui:SettingsExpander.IconSource>
+                        <ui:SymbolIconSource Symbol="Flag" />
+                    </ui:SettingsExpander.IconSource>
+                </ui:SettingsExpander>
+
+                <ui:SettingsExpander Header="技术栈" Description="Avalonia 11.3 · FluentAvaloniaUI 2.4 · .NET 8.0">
+                    <ui:SettingsExpander.IconSource>
+                        <ui:SymbolIconSource Symbol="Code" />
+                    </ui:SettingsExpander.IconSource>
+                </ui:SettingsExpander>
+
+                <ui:SettingsExpander Header="FRP 引擎" Description="基于 frp v0.61 · Fast Reverse Proxy">
+                    <ui:SettingsExpander.IconSource>
+                        <ui:SymbolIconSource Symbol="Cloud" />
+                    </ui:SettingsExpander.IconSource>
+                </ui:SettingsExpander>
+
+                <ui:SettingsExpander Header="开发者" Description="ZX Q · 个人项目">
+                    <ui:SettingsExpander.IconSource>
+                        <ui:SymbolIconSource Symbol="Contact" />
+                    </ui:SettingsExpander.IconSource>
+                </ui:SettingsExpander>
+
+                <ui:SettingsExpander Header="许可证" Description="MIT License · 开源软件">
+                    <ui:SettingsExpander.IconSource>
+                        <ui:SymbolIconSource Symbol="Document" />
+                    </ui:SettingsExpander.IconSource>
+                </ui:SettingsExpander>
+
+                <ui:SettingsExpander Header="依赖组件" Description="Avalonia · FluentAvalonia · CommunityToolkit">
+                    <ui:SettingsExpander.IconSource>
+                        <ui:SymbolIconSource Symbol="Library" />
+                    </ui:SettingsExpander.IconSource>
+                </ui:SettingsExpander>
+
+                <ui:SettingsExpander Header="致谢" Description="感谢开源社区的所有贡献者">
+                    <ui:SettingsExpander.IconSource>
+                        <ui:SymbolIconSource Symbol="Like" />
+                    </ui:SettingsExpander.IconSource>
+                </ui:SettingsExpander>
+
+                <ui:SettingsExpander Header="反馈与支持" Description="GitHub Issues · 邮件联系"
+                                     IsClickEnabled="True" ActionIconSource="ChevronRight">
+                    <ui:SettingsExpander.IconSource>
+                        <ui:SymbolIconSource Symbol="Mail" />
+                    </ui:SettingsExpander.IconSource>
+                </ui:SettingsExpander>
+
+                <ui:SettingsExpander Header="更新日志" Description="查看完整更新历史"
+                                     IsClickEnabled="True" ActionIconSource="ChevronRight">
+                    <ui:SettingsExpander.IconSource>
+                        <ui:SymbolIconSource Symbol="Clock" />
+                    </ui:SettingsExpander.IconSource>
+                </ui:SettingsExpander>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

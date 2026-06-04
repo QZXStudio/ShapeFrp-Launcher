@@ -1,0 +1,30 @@
+<Project Sdk="WixToolset.Sdk/6.0.2">
+
+  <PropertyGroup>
+    <OutputType>Package</OutputType>
+    <InstallerPlatform>x64</InstallerPlatform>
+
+    <!-- 版本号：yy.M.d 格式（MSI 兼容），CI 可覆盖 -->
+    <Version Condition="'$(Version)' == ''">$([System.DateTime]::Now.ToString(yy.M.d))</Version>
+
+    <!-- 发布输出路径（正斜杠，末尾 / 供 WiX Files 通配符用） -->
+    <PublishRoot>$(MSBuildThisFileDirectory)../publish/win-x64/</PublishRoot>
+
+    <!-- 注入 WiX 预处理器变量 -->
+    <DefineConstants>
+      Version=$(Version);
+      PublishRoot=$(PublishRoot);
+    </DefineConstants>
+  </PropertyGroup>
+
+  <!-- 构建前先 publish 主项目 -->
+  <Target Name="PublishMainApp" BeforeTargets="Compile">
+    <Exec Command="dotnet publish &quot;$(MSBuildThisFileDirectory)..\AvaloniaApplication1\AvaloniaApplication1.csproj&quot; -c $(Configuration) -r win-x64 --self-contained true -o &quot;$(PublishRoot)&quot; -p:Version=$(Version)" />
+  </Target>
+
+  <!-- WiX UI 扩展（FeatureTree 组件选择页） -->
+  <ItemGroup>
+    <PackageReference Include="WixToolset.UI.wixext" Version="6.0.2" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="AvaloniaApplication1/AvaloniaApplication1.csproj" />
+  <Project Path="QZXFrp.Setup/QZXFrp.Setup.wixproj" />
+  <Project Path="QZXFrp.Bootstrapper/QZXFrp.Bootstrapper.wixproj" />
+</Solution>

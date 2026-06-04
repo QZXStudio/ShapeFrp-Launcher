@@ -1,0 +1,26 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:bal="http://wixtoolset.org/schemas/v4/wxs/bal">
+
+  <Bundle Name="QZXFrp"
+          Manufacturer="QZX"
+          Version="$(var.Version)"
+          UpgradeCode="5B7B2E3F-D9A3-4C12-8F6E-AB45C78D90E1"
+          Copyright="(C) 2026 ZX Q">
+
+    <!-- WixInternalUIBootstrapperApplication:
+         最小化 Burn UI，直接透传 MSI 的完整界面。
+         用户会看到 MSI 的 WixUI_FeatureTree 对话框：
+         许可协议 → 安装目录选择 → 组件选择 → 进度 → 完成 -->
+    <BootstrapperApplication>
+      <bal:WixInternalUIBootstrapperApplication />
+    </BootstrapperApplication>
+
+    <Chain>
+      <MsiPackage SourceFile="$(var.MsiPath)"
+                  bal:PrimaryPackageType="default"
+                  Visible="yes" />
+    </Chain>
+
+  </Bundle>
+
+</Wix>

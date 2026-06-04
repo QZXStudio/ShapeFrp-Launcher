@@ -1,0 +1,15 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="AvaloniaApplication1.Views.Card">
+
+    <Border Padding="20" CornerRadius="8"
+            BorderBrush="{DynamicResource SystemControlForegroundChromeDisabledLowBrush}"
+            BorderThickness="1"
+            Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
+        <StackPanel Spacing="6">
+            <TextBlock x:Name="TitleBlock" FontSize="15" FontWeight="SemiBold" />
+            <TextBlock x:Name="DescBlock" FontSize="13" Foreground="Gray"
+                       TextWrapping="Wrap" />
+        </StackPanel>
+    </Border>
+</UserControl>

@@ -1,0 +1,24 @@
+<Project Sdk="WixToolset.Sdk/6.0.2">
+
+  <PropertyGroup>
+    <OutputType>Bundle</OutputType>
+    <InstallerPlatform>x64</InstallerPlatform>
+
+    <Version Condition="'$(Version)' == ''">$([System.DateTime]::Now.ToString(yy.M.d))</Version>
+    <MsiPath>$(MSBuildThisFileDirectory)../QZXFrp.Setup/bin/$(Configuration)/QZXFrp.Setup.msi</MsiPath>
+
+    <DefineConstants>
+      Version=$(Version);
+      MsiPath=$(MsiPath);
+    </DefineConstants>
+  </PropertyGroup>
+
+  <Target Name="BuildMsiFirst" BeforeTargets="Compile">
+    <Exec Command="dotnet build &quot;$(MSBuildThisFileDirectory)../QZXFrp.Setup/QZXFrp.Setup.wixproj&quot; -c $(Configuration)" />
+  </Target>
+
+  <ItemGroup>
+    <PackageReference Include="WixToolset.Bal.wixext" Version="6.0.2" />
+  </ItemGroup>
+
+</Project>

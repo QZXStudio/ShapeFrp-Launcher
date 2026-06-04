@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+
+    <!-- 版本号：默认从构建日期生成，可通过 -p:Version=1.2.3 覆盖 -->
+    <Version Condition="'$(Version)' == ''">$([System.DateTime]::Now.ToString(yyyy.MM.dd))</Version>
+    <Authors>ZX Q</Authors>
+    <Company>QZX</Company>
+    <Product>QZXFrp</Product>
+    <Description>FRP 内网穿透隧道管理客户端</Description>
+    <Copyright>Copyright (C) 2026 ZX Q</Copyright>
+    <AssemblyTitle>QZXFrp</AssemblyTitle>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.5" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.5" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.5" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.5" />
+    <PackageReference Include="FluentAvaloniaUI" Version="2.4.1" />
+  </ItemGroup>
+</Project>

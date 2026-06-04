@@ -1,0 +1,75 @@
+<w:AppWindow xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             xmlns:w="clr-namespace:FluentAvalonia.UI.Windowing;assembly=FluentAvalonia"
+             x:Class="AvaloniaApplication1.MainWindow"
+             Title="QZXFrp"
+             Width="900" Height="550"
+             FontFamily="avares://Avalonia.Fonts.Inter/Assets#Inter">
+
+    <Grid RowDefinitions="40,*">
+        <!-- 顶栏：与内容区同色，沉浸式可拖动 -->
+		<Border Grid.Row="0"
+				x:Name="TitleBarArea"
+				Background="Transparent">
+			<Button x:Name="BackButton"
+					Click="BackButton_Click"
+					IsEnabled="False"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Center"
+					Margin="5,5,0,0"
+					Width="36" Height="36"
+					CornerRadius="18"
+					Padding="0" Background="Transparent">
+				<ui:SymbolIcon Symbol="Back" FontSize="16" />
+			</Button>
+		</Border>
+
+        <ui:NavigationView Grid.Row="1" x:Name="NavView"
+                           PaneTitle=""
+                           PaneDisplayMode="Left"
+                           IsBackButtonVisible="False"
+                           IsSettingsVisible="False"
+                           SelectionChanged="NavView_SelectionChanged">
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem Content="主页" Tag="Home">
+                    <ui:NavigationViewItem.IconSource>
+                        <ui:SymbolIconSource Symbol="Home" />
+                    </ui:NavigationViewItem.IconSource>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="创建隧道" Tag="CreateTunnel">
+                    <ui:NavigationViewItem.IconSource>
+                        <ui:SymbolIconSource Symbol="Add" />
+                    </ui:NavigationViewItem.IconSource>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="FRP 核心" Tag="FrpCore"
+                                        ToolTip.Tip="管理和创建 Frpc 版本">
+                    <ui:NavigationViewItem.IconSource>
+                        <ui:SymbolIconSource Symbol="OpenLocal" />
+                    </ui:NavigationViewItem.IconSource>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="设置" Tag="Settings">
+                    <ui:NavigationViewItem.IconSource>
+                        <ui:SymbolIconSource Symbol="Setting" />
+                    </ui:NavigationViewItem.IconSource>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="关于" Tag="About">
+                    <ui:NavigationViewItem.IconSource>
+                        <ui:SymbolIconSource Symbol="Help" />
+                    </ui:NavigationViewItem.IconSource>
+                </ui:NavigationViewItem>
+            </ui:NavigationView.MenuItems>
+
+            <ui:NavigationView.PaneFooter>
+                <ui:NavigationViewItem Tag="Login" Tapped="LoginItem_Tapped">
+                    <ui:NavigationViewItem.IconSource>
+                        <ui:SymbolIconSource Symbol="Contact" />
+                    </ui:NavigationViewItem.IconSource>
+                    登录/注册
+                </ui:NavigationViewItem>
+            </ui:NavigationView.PaneFooter>
+
+            <ui:Frame x:Name="ContentFrame" />
+        </ui:NavigationView>
+    </Grid>
+</w:AppWindow>

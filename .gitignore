@@ -1,0 +1,16 @@
+# Visual Studio
+.vs/
+
+# 备份 zip
+*.zip
+
+# 构建产物
+publish/
+**/bin/
+**/obj/
+
+# NuGet
+*.nuget.g.props
+*.nuget.g.targets
+project.assets.json
+project.nuget.cache

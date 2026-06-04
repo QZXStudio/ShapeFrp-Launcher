@@ -1,0 +1,123 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+
+  <!-- ============================================================
+       QZXFrp MSI 安装包
+       零外部依赖：dotnet build 即可（NuGet 自动还原 WiX SDK）
+       输出: QZXFrp.Setup/bin/Release/QZXFrp.Setup.msi
+       ============================================================ -->
+
+  <Package Name="QZXFrp"
+           Manufacturer="QZX"
+           Version="$(var.Version)"
+           UpgradeCode="5B7B2E3F-D9A3-4C12-8F6E-AB45C78D90E1"
+           Language="2052"
+           Codepage="936">
+
+    <MajorUpgrade DowngradeErrorMessage="检测到更新的版本已安装，安装程序无法继续。" />
+    <MediaTemplate EmbedCab="yes" />
+
+    <!-- UI：组件选择页 -->
+    <ui:WixUI Id="WixUI_FeatureTree" />
+    <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+
+    <!-- ====== 特性树 ====== -->
+    <Feature Id="MainApp"
+             Title="QZXFrp 主程序"
+             Description="QZXFrp 客户端与依赖。此项必须安装。"
+             Level="1"
+             AllowAbsent="no"
+             Display="expand"
+             ConfigurableDirectory="INSTALLFOLDER">
+
+      <!-- 自动采集的应用文件（HarvestDirectory 生成） -->
+      <ComponentGroupRef Id="ApplicationComponents" />
+      <!-- 开始菜单 -->
+      <ComponentGroupRef Id="StartMenuShortcuts" />
+
+      <Feature Id="DesktopShortcut"
+               Title="桌面快捷方式"
+               Description="在桌面创建 QZXFrp 快捷方式。"
+               Level="100">
+        <ComponentGroupRef Id="DesktopShortcutComponents" />
+      </Feature>
+    </Feature>
+
+    <Feature Id="FrpcCore"
+             Title="FRP 核心 (frpc.exe)"
+             Description="内置 FRP 客户端执行文件。在本地直接管理 FRP 隧道。"
+             Level="1">
+      <ComponentGroupRef Id="FrpcComponents" />
+    </Feature>
+  </Package>
+
+  <!-- ====== 目录 ====== -->
+  <Fragment>
+    <StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="INSTALLFOLDER" Name="QZXFrp" />
+    </StandardDirectory>
+  </Fragment>
+  <Fragment>
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="QZXFrpProgramsDir" Name="QZXFrp" />
+    </StandardDirectory>
+  </Fragment>
+  <Fragment>
+    <StandardDirectory Id="DesktopFolder" />
+  </Fragment>
+
+  <!-- ====== 主程序文件：通配符自动采集 ====== -->
+  <Fragment>
+    <ComponentGroup Id="ApplicationComponents" Directory="INSTALLFOLDER">
+      <Files Include="$(var.PublishRoot)**" />
+    </ComponentGroup>
+  </Fragment>
+
+  <!-- ====== 开始菜单快捷方式 ====== -->
+  <Fragment>
+    <ComponentGroup Id="StartMenuShortcuts" Directory="QZXFrpProgramsDir">
+      <Component Id="AppShortcut" Bitness="always64">
+        <Shortcut Name="QZXFrp"
+                  Target="[INSTALLFOLDER]AvaloniaApplication1.exe"
+                  WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU"
+                       Key="Software\QZX\QZXFrp"
+                       Name="StartMenuInstalled"
+                       Value="1" Type="integer"
+                       KeyPath="yes" />
+        <RemoveFolder Id="RemoveStartMenu" On="uninstall" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <!-- ====== 桌面快捷方式（可选）===== -->
+  <Fragment>
+    <ComponentGroup Id="DesktopShortcutComponents" Directory="DesktopFolder">
+      <Component Id="DesktopShortcutComp" Bitness="always64">
+        <Shortcut Name="QZXFrp"
+                  Target="[INSTALLFOLDER]AvaloniaApplication1.exe"
+                  WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU"
+                       Key="Software\QZX\QZXFrp"
+                       Name="DesktopInstalled"
+                       Value="1" Type="integer"
+                       KeyPath="yes" />
+        <RemoveFolder Id="RemoveDesktop" On="uninstall" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <!-- ====== FRP 核心占位 ====== -->
+  <Fragment>
+    <ComponentGroup Id="FrpcComponents" Directory="INSTALLFOLDER">
+      <Component Id="FrpcPlaceholder" Bitness="always64">
+        <RegistryValue Root="HKCU"
+                       Key="Software\QZX\QZXFrp"
+                       Name="FrpcInstalled"
+                       Value="1" Type="integer"
+                       KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+</Wix>
