@@ -13,10 +13,6 @@
     </DefineConstants>
   </PropertyGroup>
 
-  <Target Name="BuildMsiFirst" BeforeTargets="Compile">
-    <Exec Command="dotnet build &quot;$(MSBuildThisFileDirectory)../QZXFrp.Setup/QZXFrp.Setup.wixproj&quot; -c $(Configuration)" />
-  </Target>
-
   <ItemGroup>
     <PackageReference Include="WixToolset.Bal.wixext" Version="6.0.2" />
   </ItemGroup>
