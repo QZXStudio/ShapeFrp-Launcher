@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <!-- 构建前先 publish 主项目 -->
-  <Target Name="PublishMainApp" BeforeTargets="Compile">
+  <Target Name="PublishMainApp" BeforeTargets="HarvestDirectory">
     <Exec Command="dotnet publish &quot;$(MSBuildThisFileDirectory)..\AvaloniaApplication1\AvaloniaApplication1.csproj&quot; -c $(Configuration) -r win-x64 --self-contained true -o &quot;$(PublishRoot)&quot; -p:Version=$(Version)" />
   </Target>
 
