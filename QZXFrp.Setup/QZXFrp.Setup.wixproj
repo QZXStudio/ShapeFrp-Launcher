@@ -3,18 +3,13 @@
   <PropertyGroup>
     <OutputType>Package</OutputType>
     <InstallerPlatform>x64</InstallerPlatform>
-
-    <!-- 版本号：yy.M.d 格式（MSI 兼容），CI 可覆盖 -->
+    <!-- en-US 为基语言，zh-CN 内嵌为 .mst transform，Windows Installer 按系统区域自动选择 -->
+    <Culture>en-US;zh-CN</Culture>
     <Version Condition="'$(Version)' == ''">$([System.DateTime]::Now.ToString(yy.M.d))</Version>
-
-    <!-- 发布输出路径（正斜杠，末尾 / 供 WiX Files 通配符用） -->
-    <PublishRoot>$(MSBuildThisFileDirectory)../publish/win-x64/</PublishRoot>
-
-    <!-- 注入 WiX 预处理器变量 -->
-    <DefineConstants>
-      Version=$(Version);
-      PublishRoot=$(PublishRoot);
-    </DefineConstants>
+    <PublishRoot Condition="'$(PublishRoot)' == ''">$(MSBuildThisFileDirectory)../publish/win-x64/</PublishRoot>
+    <!-- ProductCode 由 build.ps1 传入；直接编译时用随机 GUID 兜底 -->
+    <ProductCode Condition="'$(ProductCode)' == ''">$([System.Guid]::NewGuid().ToString())</ProductCode>
+    <DefineConstants>Version=$(Version);PublishRoot=$(PublishRoot);ProductCode=$(ProductCode)</DefineConstants>
   </PropertyGroup>
 
   <!-- 构建前先 publish 主项目 -->
@@ -22,7 +17,6 @@
     <Exec Command="dotnet publish &quot;$(MSBuildThisFileDirectory)..\ShapeFrpLauncher\ShapeFrpLauncher.csproj&quot; -c $(Configuration) -r win-x64 --self-contained true -o &quot;$(PublishRoot)&quot; -p:Version=$(Version)" />
   </Target>
 
-  <!-- WiX UI 扩展（FeatureTree 组件选择页） -->
   <ItemGroup>
     <PackageReference Include="WixToolset.UI.wixext" Version="6.0.2" />
   </ItemGroup>

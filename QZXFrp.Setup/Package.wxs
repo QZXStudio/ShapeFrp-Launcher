@@ -9,9 +9,10 @@
 
   <Package Name="QZXFrp"
            Manufacturer="QZX"
+           ProductCode="$(var.ProductCode)"
            Version="$(var.Version)"
            UpgradeCode="5B7B2E3F-D9A3-4C12-8F6E-AB45C78D90E1"
-           Language="2052"
+           Language="1033"
            Codepage="936">
 
     <MajorUpgrade DowngradeErrorMessage="检测到更新的版本已安装，安装程序无法继续。" />
