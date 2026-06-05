@@ -10,11 +10,19 @@ namespace AvaloniaApplication1.ViewModels;
 
 public class ReleaseListViewModel : ViewModelBase
 {
-    private const string Owner = "fatedier";
-    private const string Repo = "frp";
+    private const string GitHubOwner = "fatedier";
+    private const string GitHubRepo = "frp";
+    private const string GiteeOwner = "firfe";
+    private const string GiteeRepo = "frp_zh";
     private const int PageSize = 20;
 
-    private readonly GitHubReleaseService _service = new();
+    private static (string owner, string repo) GetOwnerRepo(ReleaseSourceType source) => source switch
+    {
+        ReleaseSourceType.Gitee => (GiteeOwner, GiteeRepo),
+        _ => (GitHubOwner, GitHubRepo),
+    };
+
+    private IReleaseService _service = ReleaseServiceFactory.Create(ReleaseSourceConfig.CurrentSource);
 
     public ObservableCollection<ReleaseItem> Releases { get; } = new();
 
@@ -56,10 +64,30 @@ public class ReleaseListViewModel : ViewModelBase
     public bool ShowEndLabel => !HasMore && !IsEmpty && !IsLoading;
 
     private int _currentPage;
+    private static ReleaseSourceType? _previousSource;
+    private static string? _previousToken;
 
     private void RefreshComputed()
     {
         OnPropertyChanged(nameof(ShowEndLabel));
+    }
+
+    /// <summary>
+    /// 检查仓库来源或 Token 是否变更，若变更则重建服务并全量刷新。
+    /// </summary>
+    public async Task EnsureFreshAsync()
+    {
+        if (_previousSource != ReleaseSourceConfig.CurrentSource || _previousToken != ReleaseSourceConfig.GitHubToken)
+        {
+            _previousSource = ReleaseSourceConfig.CurrentSource;
+            _previousToken = ReleaseSourceConfig.GitHubToken;
+            _service = ReleaseServiceFactory.Create(ReleaseSourceConfig.CurrentSource);
+        }
+
+        if (Releases.Count > 0)
+            await RefreshAsync();
+        else
+            await LoadFirstPageAsync();
     }
 
     public async Task LoadFirstPageAsync()
@@ -76,29 +104,27 @@ public class ReleaseListViewModel : ViewModelBase
         await LoadNextPageAsync();
     }
 
+    public async Task ForceReloadAsync()
+    {
+        _service = ReleaseServiceFactory.Create(ReleaseSourceConfig.CurrentSource);
+        await LoadFirstPageAsync();
+    }
+
     /// <summary>静默刷新首页数据，不显示加载状态、不清空已有列表</summary>
     public async Task RefreshAsync()
     {
         try
         {
-            var releases = await _service.GetReleasesAsync(Owner, Repo, 1, PageSize)
+            var (owner, repo) = GetOwnerRepo(ReleaseSourceConfig.CurrentSource);
+            var releases = await _service.GetReleasesAsync(owner, repo, 1, PageSize)
                 .ConfigureAwait(false);
-
-            var items = releases.Select(release =>
-            {
-                var winAsset = release.Assets.FirstOrDefault(a =>
-                    a.Name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) &&
-                    a.Name.Contains("windows", StringComparison.OrdinalIgnoreCase) &&
-                    a.Name.Contains("amd64", StringComparison.OrdinalIgnoreCase));
-                return new ReleaseItem(release, winAsset);
-            }).ToList();
 
             var hasMore = releases.Count == PageSize;
 
             Dispatcher.UIThread.Post(() =>
             {
                 Releases.Clear();
-                foreach (var item in items)
+                foreach (var item in releases)
                     Releases.Add(item);
                 _currentPage = 1;
                 HasMore = hasMore;
@@ -122,24 +148,16 @@ public class ReleaseListViewModel : ViewModelBase
 
         try
         {
-            var releases = await _service.GetReleasesAsync(Owner, Repo, _currentPage + 1, PageSize)
+            var (owner, repo) = GetOwnerRepo(ReleaseSourceConfig.CurrentSource);
+            var releases = await _service.GetReleasesAsync(owner, repo, _currentPage + 1, PageSize)
                 .ConfigureAwait(false);
-
-            var items = releases.Select(release =>
-            {
-                var winAsset = release.Assets.FirstOrDefault(a =>
-                    a.Name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) &&
-                    a.Name.Contains("windows", StringComparison.OrdinalIgnoreCase) &&
-                    a.Name.Contains("amd64", StringComparison.OrdinalIgnoreCase));
-                return new ReleaseItem(release, winAsset);
-            }).ToList();
 
             var page = _currentPage + 1;
             var hasMore = releases.Count == PageSize;
 
             Dispatcher.UIThread.Post(() =>
             {
-                foreach (var item in items)
+                foreach (var item in releases)
                     Releases.Add(item);
                 _currentPage = page;
                 HasMore = hasMore;
