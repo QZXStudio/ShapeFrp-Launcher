@@ -6,23 +6,23 @@
              mc:Ignorable="d"
              x:Class="AvaloniaApplication1.Views.FrpCoreView">
 
+    <UserControl.Styles>
+        <Style Selector="ui|BreadcrumbBarItem TextBlock">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+    </UserControl.Styles>
+
     <Grid RowDefinitions="Auto,*">
         <Border Grid.Row="0" Padding="32,24,32,12">
             <StackPanel Spacing="2">
-                <TextBlock Text="FRP 核心" FontSize="20" FontWeight="SemiBold" />
-                <TextBlock Text="管理和创建 Frpc 版本"
+                <ui:BreadcrumbBar x:Name="Breadcrumb" />
+                <TextBlock x:Name="PageDescription"
+                           Text="管理和创建 Frpc 版本"
                            FontSize="13" Foreground="Gray" />
             </StackPanel>
         </Border>
 
-        <ScrollViewer Grid.Row="1">
-            <StackPanel Margin="16,0,32,32" Spacing="4">
-                <ui:SettingsExpander Header="已安装版本" Description="暂无">
-                    <ui:SettingsExpander.IconSource>
-                        <ui:SymbolIconSource Symbol="OpenLocal" />
-                    </ui:SettingsExpander.IconSource>
-                </ui:SettingsExpander>
-            </StackPanel>
-        </ScrollViewer>
+        <ui:Frame Grid.Row="1" x:Name="ContentFrame" />
     </Grid>
 </UserControl>
