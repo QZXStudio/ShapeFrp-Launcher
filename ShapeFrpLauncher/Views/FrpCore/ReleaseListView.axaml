@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             xmlns:vm="clr-namespace:AvaloniaApplication1.ViewModels"
+             xmlns:m="clr-namespace:AvaloniaApplication1.Models"
+             mc:Ignorable="d"
+             x:Class="AvaloniaApplication1.Views.FrpCore.ReleaseListView"
+             x:DataType="vm:ReleaseListViewModel">
+
+    <ScrollViewer x:Name="MainScrollViewer">
+        <StackPanel Spacing="12" Margin="32,8,32,32">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                        Spacing="8" IsVisible="{Binding IsLoading}">
+                <ui:ProgressRing IsActive="True" />
+            </StackPanel>
+
+            <ui:InfoBar IsOpen="{Binding HasError}"
+                        Severity="Error"
+                        Title="加载失败"
+                        Message="{Binding ErrorMessage}" />
+
+            <TextBlock Text="暂无 Release"
+                       FontSize="14" Foreground="Gray"
+                       HorizontalAlignment="Center"
+                       IsVisible="{Binding IsEmpty}" />
+
+            <ItemsControl ItemsSource="{Binding Releases}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="m:ReleaseItem">
+                        <ui:SettingsExpander Header="{Binding TagName}"
+                                             Description="{Binding Name}"
+                                             IsClickEnabled="True">
+                            <ui:SettingsExpander.IconSource>
+                                <ui:SymbolIconSource Symbol="Cloud" />
+                            </ui:SettingsExpander.IconSource>
+                        </ui:SettingsExpander>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock Text="已加载全部版本"
+                       FontSize="13" Foreground="Gray"
+                       HorizontalAlignment="Center"
+                       IsVisible="{Binding ShowEndLabel}" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
