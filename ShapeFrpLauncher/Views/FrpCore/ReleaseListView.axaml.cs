@@ -37,10 +37,8 @@ public partial class ReleaseListView : UserControl
         if (_initialized) return;
         _initialized = true;
 
-        if (_vm.Releases.Count > 0)
-            _ = _vm.RefreshAsync();
-        else
-            _ = _vm.LoadFirstPageAsync();
+        // 每次加载都检查源是否变更，若变更则全量刷新
+        _ = _vm.EnsureFreshAsync();
     }
 
     private void OnScrollChanged(object? sender, ScrollChangedEventArgs e)
@@ -59,33 +57,27 @@ public partial class ReleaseListView : UserControl
 
     /// <summary>
     /// 卡片加载后的滑入+淡入动画，风格对齐 Frame 导航过渡。
-    /// 先设初始态（透明 + 向右偏移），下一帧附着 Transition 再设终态，
-    /// 触发 Opacity 0→1 和 Translate X 20→0 的双重过渡。
     /// </summary>
     private void OnCardLoaded(object? sender, RoutedEventArgs e)
     {
-        if (sender is not Border border) return;
-        // 只执行一次（ItemsControl 复用容器时防止重复动画）
-        if (border.Tag is not null) return;
-        border.Tag = true;
+        if (sender is not Control card) return;
+        if (card.Tag is not null) return;
+        card.Tag = true;
 
-        // 初始态：透明 + 从右滑入
-        border.Opacity = 0;
+        card.Opacity = 0;
         var slide = new TranslateTransform(20, 0);
-        border.RenderTransform = slide;
+        card.RenderTransform = slide;
 
         Dispatcher.UIThread.Post(() =>
         {
-            // Opacity 淡入
-            border.Transitions = new Transitions
+            card.Transitions = new Transitions
             {
                 new DoubleTransition
                 {
-                    Property = Border.OpacityProperty,
+                    Property = Control.OpacityProperty,
                     Duration = TimeSpan.FromSeconds(0.35),
                 },
             };
-            // Translate X 滑入（在 TranslateTransform 自身挂载 Transition）
             slide.Transitions = new Transitions
             {
                 new DoubleTransition
@@ -95,8 +87,7 @@ public partial class ReleaseListView : UserControl
                 },
             };
 
-            // 同时触发
-            border.Opacity = 1;
+            card.Opacity = 1;
             slide.X = 0;
         });
     }

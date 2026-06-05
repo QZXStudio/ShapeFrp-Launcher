@@ -36,7 +36,7 @@ public partial class FrpCoreView : UserControl
 
         ContentFrame.Navigated += OnContentFrameNavigated;
 
-        SetBreadcrumbSingle("Frp 核心");
+        SetBreadcrumbSingle("Frpc 核心");
         ContentFrame.Navigate(typeof(FrpCoreOverviewView));
     }
 
@@ -44,13 +44,15 @@ public partial class FrpCoreView : UserControl
     {
         if (e.Content is ReleaseListView)
         {
-            SetBreadcrumbTwo("Frp 核心", "下载Frpc核心");
+            SetBreadcrumbTwo("Frpc 核心", "下载 Frpc 核心");
             PageDescription.Text = "从远程仓库获取 Frpc 的 Release 信息";
+            RefreshButton.IsVisible = true;
         }
         else
         {
-            SetBreadcrumbSingle("Frp 核心");
+            SetBreadcrumbSingle("Frpc 核心");
             PageDescription.Text = "管理和创建 Frpc 版本";
+            RefreshButton.IsVisible = false;
 
             if (e.Content is FrpCoreOverviewView overview)
             {
@@ -73,6 +75,12 @@ public partial class FrpCoreView : UserControl
         _releaseListVM ??= new ReleaseListViewModel();
         ReleaseListView.SetSharedViewModel(_releaseListVM);
         ContentFrame.Navigate(typeof(ReleaseListView), null, ForwardTransition);
+    }
+
+    private async void OnRefreshClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (_releaseListVM is not null)
+            await _releaseListVM.ForceReloadAsync();
     }
 
     public bool HandleBackNavigation()

@@ -15,12 +15,26 @@
 
     <Grid RowDefinitions="Auto,*">
         <Border Grid.Row="0" Padding="32,24,32,12">
-            <StackPanel Spacing="2">
-                <ui:BreadcrumbBar x:Name="Breadcrumb" />
-                <TextBlock x:Name="PageDescription"
-                           Text="管理和创建 Frpc 版本"
-                           FontSize="13" Foreground="Gray" />
-            </StackPanel>
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Spacing="2">
+                    <ui:BreadcrumbBar x:Name="Breadcrumb" />
+                    <TextBlock x:Name="PageDescription"
+                               Text="管理和创建 Frpc 版本"
+                               FontSize="13" Foreground="Gray" />
+                </StackPanel>
+
+                <Button Grid.Column="1"
+                        x:Name="RefreshButton"
+                        Width="32" Height="32"
+                        Padding="0"
+                        CornerRadius="16"
+                        Background="Transparent"
+                        VerticalAlignment="Center"
+                        IsVisible="False"
+                        Click="OnRefreshClick">
+                    <ui:SymbolIcon Symbol="Refresh" FontSize="16" />
+                </Button>
+            </Grid>
         </Border>
 
         <ui:Frame Grid.Row="1" x:Name="ContentFrame" />
