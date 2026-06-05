@@ -9,41 +9,201 @@
              x:Class="AvaloniaApplication1.Views.FrpCore.ReleaseListView"
              x:DataType="vm:ReleaseListViewModel">
 
-    <ScrollViewer x:Name="MainScrollViewer">
-        <StackPanel Spacing="12" Margin="32,8,32,32">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
-                        Spacing="8" IsVisible="{Binding IsLoading}">
-                <ui:ProgressRing IsActive="True" />
+    <UserControl.Styles>
+        <!-- 卡片容器：该死的神人ds最喜欢乱改这块 -->
+        <Style Selector="Border.release-card">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+			<Setter Property="HorizontalAlignment" Value="Stretch" />
+			<Setter Property="CornerRadius" Value="8" />
+        </Style>
+
+        <!-- 折叠按钮背景与卡片一致 -->
+        <Style Selector="ToggleButton.card-toggle">
+          
+            <Setter Property="BorderThickness" Value="0" />
+     
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="16,14" />
+        </Style>
+    
+        <Style Selector="ToggleButton.card-toggle:pressed,
+                       ToggleButton.card-toggle:checked:pressed">
+            <Setter Property="Background" Value="{DynamicResource SolidBackgroundFillColorQuarternaryBrush}" />
+			<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="ToggleButton.card-toggle:checked">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}" />
+			<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+
+        <!-- 展开区域背景与卡片一致 -->
+        <Style Selector="Border.release-card-expanded">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}" />
+            <Setter Property="CornerRadius" Value="0,0,8,8" />
+			
+        </Style>
+
+        <!-- 箭头：FluentAvalonia 内置 ChevronDown 图标，展开时 180° 翻转 -->
+        <Style Selector="ui|SymbolIcon.chevron">
+            <Setter Property="RenderTransform" Value="rotate(0deg)" />
+        </Style>
+        <Style Selector="ToggleButton.card-toggle:checked ui|SymbolIcon.chevron">
+            <Setter Property="RenderTransform" Value="rotate(180deg)" />
+        </Style>
+
+        <!-- ItemsControl 子项强制水平拉伸 -->
+        <Style Selector="ItemsControl.release-list ContentPresenter">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer x:Name="MainScrollViewer"
+                  HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="24,8,24,32" HorizontalAlignment="Stretch">
+            <StackPanel Spacing="12" HorizontalAlignment="Stretch">
+                <!-- 加载中 -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                            Spacing="8" IsVisible="{Binding IsLoading}">
+                    <ui:ProgressRing IsActive="True" />
+                </StackPanel>
+
+                <!-- 加载失败 -->
+                <ui:InfoBar IsOpen="{Binding HasError}"
+                            Severity="Error"
+                            Title="加载失败"
+                            Message="{Binding ErrorMessage}" />
+
+                <!-- 空数据 -->
+                <TextBlock Text="暂无 Release"
+                           FontSize="14" Foreground="Gray"
+                           HorizontalAlignment="Center"
+                           IsVisible="{Binding IsEmpty}" />
+
+                <!-- Release 卡片列表 -->
+                <ItemsControl Classes="release-list"
+                              ItemsSource="{Binding Releases}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="m:ReleaseItem">
+                            <Border Classes="release-card"
+                                    Loaded="OnCardLoaded"
+									HorizontalAlignment="Stretch"
+                                    Margin="0,0,0,4">
+                                <StackPanel>
+                                    <!-- ====== 折叠态标题栏 ====== -->
+                                    <ToggleButton Classes="card-toggle"
+                                                  IsChecked="{Binding IsExpanded, Mode=TwoWay}">
+										
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <!-- 左侧 -->
+                                            <StackPanel Spacing="4">
+                                                <TextBlock Text="{Binding TagName}"
+                                                           FontSize="16" FontWeight="SemiBold" />
+                                                <StackPanel Orientation="Horizontal" Spacing="16">
+                                                    <StackPanel Orientation="Horizontal" Spacing="4">
+                                                        <ui:SymbolIcon Symbol="Clock"
+                                                                       FontSize="12"
+                                                                       Foreground="Gray" />
+                                                        <TextBlock Text="{Binding DisplayDate}"
+                                                                   FontSize="12" Foreground="Gray" />
+                                                    </StackPanel>
+                                                    <TextBlock Text="{Binding Name}"
+                                                               FontSize="12" Foreground="Gray"
+                                                               MaxWidth="300"
+                                                               TextTrimming="CharacterEllipsis" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <!-- 右侧：ChevronDown 内置图标 -->
+                                            <ui:SymbolIcon Grid.Column="1"
+                                                           Classes="chevron"
+                                                           Symbol="ChevronDown"
+                                                           FontSize="14"
+                                                           VerticalAlignment="Center">
+                                                <ui:SymbolIcon.Transitions>
+                                                    <Transitions>
+                                                        <TransformOperationsTransition
+                                                            Property="RenderTransform"
+                                                            Duration="0:0:0.2" />
+                                                    </Transitions>
+                                                </ui:SymbolIcon.Transitions>
+                                            </ui:SymbolIcon>
+                                        </Grid>
+                                    </ToggleButton>
+
+                                    <!-- ====== 展开内容 ====== -->
+                                    <Border IsVisible="{Binding IsExpanded}"
+                                            Classes="release-card-expanded"
+                                            Padding="16,0,16,16">
+                                        <StackPanel Spacing="12">
+                                            <Border Height="1"
+                                                    Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+
+                                            <!-- 版本说明 -->
+                                            <StackPanel Spacing="8">
+                                                <TextBlock Text="版本说明"
+                                                           FontSize="12" FontWeight="SemiBold"
+                                                           Foreground="Gray" />
+                                                <ScrollViewer MaxHeight="280"
+                                                              VerticalScrollBarVisibility="Auto"
+                                                              HorizontalScrollBarVisibility="Disabled">
+                                                    <TextBlock Text="{Binding Body}"
+                                                               TextWrapping="Wrap"
+                                                               FontSize="13"
+                                                               LineHeight="20" />
+                                                </ScrollViewer>
+                                            </StackPanel>
+
+                                            <Border Height="1"
+                                                    Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+
+                                            <!-- 文件信息 -->
+                                            <StackPanel Spacing="8">
+                                                <TextBlock Text="文件信息"
+                                                           FontSize="12" FontWeight="SemiBold"
+                                                           Foreground="Gray" />
+                                                <Grid ColumnDefinitions="Auto,*"
+                                                      ColumnSpacing="8"
+                                                      RowDefinitions="Auto,Auto"
+                                                      RowSpacing="6">
+                                                    <TextBlock Text="文件名："
+                                                               Foreground="Gray" FontSize="13" />
+                                                    <TextBlock Grid.Column="1"
+                                                               Text="{Binding AssetName}"
+                                                               FontSize="13" FontWeight="Medium" />
+                                                    <TextBlock Grid.Row="1"
+                                                               Text="文件大小："
+                                                               Foreground="Gray" FontSize="13" />
+                                                    <TextBlock Grid.Row="1" Grid.Column="1"
+                                                               Text="{Binding DisplaySize}"
+                                                               FontSize="13" FontWeight="Medium" />
+                                                </Grid>
+                                            </StackPanel>
+
+                                            <!-- 下载按钮 -->
+                                            <Button HorizontalAlignment="Right"
+                                                    FontSize="14"
+                                                    Padding="24,8,24,8"
+                                                    CornerRadius="6">
+                                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                                    <PathIcon Data="M13,4 L13,12 L16,9 L17.5,10.5 L12,16 L6.5,10.5 L8,9 L11,12 L11,4 Z M4,18 L4,20 L20,20 L20,18 Z" />
+                                                    <TextBlock Text="下载此版本" />
+                                                </StackPanel>
+                                            </Button>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- 已加载全部 -->
+                <TextBlock Text="已加载全部版本"
+                           FontSize="13" Foreground="Gray"
+                           HorizontalAlignment="Center"
+                           IsVisible="{Binding ShowEndLabel}" />
             </StackPanel>
-
-            <ui:InfoBar IsOpen="{Binding HasError}"
-                        Severity="Error"
-                        Title="加载失败"
-                        Message="{Binding ErrorMessage}" />
-
-            <TextBlock Text="暂无 Release"
-                       FontSize="14" Foreground="Gray"
-                       HorizontalAlignment="Center"
-                       IsVisible="{Binding IsEmpty}" />
-
-            <ItemsControl ItemsSource="{Binding Releases}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate x:DataType="m:ReleaseItem">
-                        <ui:SettingsExpander Header="{Binding TagName}"
-                                             Description="{Binding Name}"
-                                             IsClickEnabled="True">
-                            <ui:SettingsExpander.IconSource>
-                                <ui:SymbolIconSource Symbol="Cloud" />
-                            </ui:SettingsExpander.IconSource>
-                        </ui:SettingsExpander>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-            <TextBlock Text="已加载全部版本"
-                       FontSize="13" Foreground="Gray"
-                       HorizontalAlignment="Center"
-                       IsVisible="{Binding ShowEndLabel}" />
-        </StackPanel>
+        </Grid>
     </ScrollViewer>
 </UserControl>
