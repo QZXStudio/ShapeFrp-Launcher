@@ -18,7 +18,8 @@ public partial class MainWindow : AppWindow
     };
 
     private readonly Stack<Type> _backStack = new();
-    private bool _isNavigating = false;  // 防重入标志
+    private bool _isNavigating = false;
+    private Views.FrpCoreView? _frpCoreView;
 
     public MainWindow()
     {
@@ -35,7 +36,7 @@ public partial class MainWindow : AppWindow
 
     private void NavView_SelectionChanged(object sender, NavigationViewSelectionChangedEventArgs e)
     {
-        if (_isNavigating) return;  // 防止重入
+        if (_isNavigating) return;
 
         if (e.SelectedItem is not NavigationViewItem { Tag: string tag })
             return;
@@ -43,7 +44,10 @@ public partial class MainWindow : AppWindow
             return;
 
         var currentType = ContentFrame.Content?.GetType();
-        if (currentType == pageType) return;  // 相同页面不重复导航
+        if (currentType == pageType) return;
+
+        // 离开当前 FrpCoreView 时取消订阅
+        UnsubscribeFrpCore();
 
         _isNavigating = true;
 
@@ -53,7 +57,11 @@ public partial class MainWindow : AppWindow
                 _backStack.Push(currentType);
 
             ContentFrame.Navigate(pageType);
-            BackButton.IsEnabled = _backStack.Count > 0;
+
+            // 进入 FrpCoreView 时订阅内部导航事件
+            SubscribeFrpCore();
+
+            UpdateBackButtonState();
         }
         finally
         {
@@ -63,11 +71,21 @@ public partial class MainWindow : AppWindow
 
     private void BackButton_Click(object? sender, RoutedEventArgs e)
     {
+        // 优先让当前 FrpCoreView 处理内部返回（子页面 → 概览）
+        if (_frpCoreView is { CanGoBack: true })
+        {
+            _frpCoreView.HandleBackNavigation();
+            return;
+        }
+
         if (_backStack.Count == 0) return;
 
         var prevType = _backStack.Pop();
 
         _isNavigating = true;
+
+        // 离开当前 FrpCoreView 时取消订阅
+        UnsubscribeFrpCore();
 
         try
         {
@@ -84,12 +102,36 @@ public partial class MainWindow : AppWindow
                 }
             }
 
-            BackButton.IsEnabled = _backStack.Count > 0;
+            SubscribeFrpCore();
+            UpdateBackButtonState();
         }
         finally
         {
             _isNavigating = false;
         }
+    }
+
+    private void SubscribeFrpCore()
+    {
+        if (ContentFrame.Content is Views.FrpCoreView frpCore)
+        {
+            _frpCoreView = frpCore;
+            _frpCoreView.CanGoBackChanged += UpdateBackButtonState;
+        }
+    }
+
+    private void UnsubscribeFrpCore()
+    {
+        if (_frpCoreView != null)
+        {
+            _frpCoreView.CanGoBackChanged -= UpdateBackButtonState;
+            _frpCoreView = null;
+        }
+    }
+
+    private void UpdateBackButtonState()
+    {
+        BackButton.IsEnabled = _backStack.Count > 0 || (_frpCoreView?.CanGoBack ?? false);
     }
 
     private void LoginItem_Tapped(object? sender, RoutedEventArgs e)
