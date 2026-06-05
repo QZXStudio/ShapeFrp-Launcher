@@ -20,6 +20,7 @@ public partial class MainWindow : AppWindow
     private readonly Stack<Type> _backStack = new();
     private bool _isNavigating = false;
     private Views.FrpCoreView? _frpCoreView;
+    private Views.SettingsView? _settingsView;
 
     public MainWindow()
     {
@@ -46,8 +47,9 @@ public partial class MainWindow : AppWindow
         var currentType = ContentFrame.Content?.GetType();
         if (currentType == pageType) return;
 
-        // 离开当前 FrpCoreView 时取消订阅
+        // 离开当前页面时取消内部导航订阅
         UnsubscribeFrpCore();
+        UnsubscribeSettings();
 
         _isNavigating = true;
 
@@ -58,8 +60,9 @@ public partial class MainWindow : AppWindow
 
             ContentFrame.Navigate(pageType);
 
-            // 进入 FrpCoreView 时订阅内部导航事件
+            // 进入新页面时订阅内部导航事件
             SubscribeFrpCore();
+            SubscribeSettings();
 
             UpdateBackButtonState();
         }
@@ -71,10 +74,15 @@ public partial class MainWindow : AppWindow
 
     private void BackButton_Click(object? sender, RoutedEventArgs e)
     {
-        // 优先让当前 FrpCoreView 处理内部返回（子页面 → 概览）
+        // 优先让当前页面处理内部返回（子页面 → 概览）
         if (_frpCoreView is { CanGoBack: true })
         {
             _frpCoreView.HandleBackNavigation();
+            return;
+        }
+        if (_settingsView is { CanGoBack: true })
+        {
+            _settingsView.HandleBackNavigation();
             return;
         }
 
@@ -84,8 +92,8 @@ public partial class MainWindow : AppWindow
 
         _isNavigating = true;
 
-        // 离开当前 FrpCoreView 时取消订阅
         UnsubscribeFrpCore();
+        UnsubscribeSettings();
 
         try
         {
@@ -103,6 +111,7 @@ public partial class MainWindow : AppWindow
             }
 
             SubscribeFrpCore();
+            SubscribeSettings();
             UpdateBackButtonState();
         }
         finally
@@ -129,9 +138,29 @@ public partial class MainWindow : AppWindow
         }
     }
 
+    private void SubscribeSettings()
+    {
+        if (ContentFrame.Content is Views.SettingsView settings)
+        {
+            _settingsView = settings;
+            _settingsView.CanGoBackChanged += UpdateBackButtonState;
+        }
+    }
+
+    private void UnsubscribeSettings()
+    {
+        if (_settingsView != null)
+        {
+            _settingsView.CanGoBackChanged -= UpdateBackButtonState;
+            _settingsView = null;
+        }
+    }
+
     private void UpdateBackButtonState()
     {
-        BackButton.IsEnabled = _backStack.Count > 0 || (_frpCoreView?.CanGoBack ?? false);
+        BackButton.IsEnabled = _backStack.Count > 0
+            || (_frpCoreView?.CanGoBack ?? false)
+            || (_settingsView?.CanGoBack ?? false);
     }
 
     private void LoginItem_Tapped(object? sender, RoutedEventArgs e)
