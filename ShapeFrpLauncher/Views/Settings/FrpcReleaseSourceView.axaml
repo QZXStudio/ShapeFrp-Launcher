@@ -1,0 +1,93 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             x:Class="AvaloniaApplication1.Views.Settings.FrpcReleaseSourceView">
+
+    <UserControl.Styles>
+        <Style Selector="Button.accent-button">
+            <Setter Property="Background" Value="{DynamicResource SystemAccentColor}" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+    </UserControl.Styles>
+
+    <StackPanel Spacing="12" Margin="32,34,42,34">
+        <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Spacing="4">
+                <TextBlock Text="仓库来源"
+                           FontSize="14" FontWeight="SemiBold" />
+                <TextBlock Text="选择 Frpc Release 的获取来源，切换后需重新进入下载页面生效"
+                           FontSize="12" Foreground="Gray"
+                           TextWrapping="Wrap" />
+            </StackPanel>
+
+            <ComboBox Grid.Column="1"
+                      x:Name="SourceComboBox"
+                      Width="140"
+                      VerticalAlignment="Center" />
+        </Grid>
+
+        <Border Height="1"
+                Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+
+        <StackPanel Spacing="4">
+            <TextBlock Text="GitHub"
+                       FontSize="13" FontWeight="SemiBold" />
+            <TextBlock Text="github.com/fatedier/frp — 官方主仓库，Release 信息完整包含二进制附件"
+                       FontSize="12" Foreground="Gray"
+                       TextWrapping="Wrap" />
+        </StackPanel>
+
+        <!-- GitHub Token -->
+        <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1" CornerRadius="8" Padding="16,12">
+            <StackPanel Spacing="8">
+                <TextBlock Text="GitHub Token（选填）"
+                           FontSize="13" FontWeight="SemiBold" />
+                <TextBlock Text="未认证时每小时仅 60 次请求，填写 Token 后可提升至每小时 5000 次"
+                           FontSize="12" Foreground="Gray"
+                           TextWrapping="Wrap" />
+                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+                    <TextBox x:Name="TokenBox"
+                             Watermark="ghp_xxxxxxxxxxxxxxxxxxxx"
+                             PasswordChar="●" />
+                    <Button Grid.Column="1"
+                            x:Name="TokenActionButton"
+                            Content="保存并测试"
+                            FontSize="12"
+                            Padding="16,6"
+                            Classes="accent-button"
+                            IsVisible="False"
+                            Click="OnTokenTestClick" />
+                    <Button Grid.Column="2"
+                            x:Name="TokenHelpButton"
+                            Content="生成 Token"
+                            FontSize="12"
+                            Padding="12,6"
+                            Click="OnTokenHelpClick" />
+                    <ui:ProgressRing Grid.Column="1"
+                                  x:Name="TokenTestSpinner"
+                                  Width="20" Height="20"
+                                  IsVisible="False"
+                                  IsActive="False" />
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <StackPanel Spacing="4">
+            <TextBlock Text="Gitee"
+                       FontSize="13" FontWeight="SemiBold" />
+            <TextBlock Text="gitee.com/firfe/frp_zh — 国内镜像，frp 中文发行版，Release 信息完整"
+                       FontSize="12" Foreground="Gray"
+                       TextWrapping="Wrap" />
+        </StackPanel>
+
+        <StackPanel Spacing="4">
+            <TextBlock Text="GitLab"
+                       FontSize="13" FontWeight="SemiBold" />
+            <TextBlock Text="gitlab.com/fatedier/frp — 备选平台，附件通过 Release Link 提供"
+                       FontSize="12" Foreground="Gray"
+                       TextWrapping="Wrap" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

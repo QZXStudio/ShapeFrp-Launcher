@@ -1,0 +1,76 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             x:Class="AvaloniaApplication1.Views.Settings.SettingsOverviewView">
+
+    <ScrollViewer>
+        <StackPanel Spacing="4" Margin="16,0,32,32">
+        <ui:SettingsExpander Header="通用设置" Description="语言、主题"
+                             IsClickEnabled="True" ActionIconSource="ChevronRight">
+            <ui:SettingsExpander.IconSource>
+                <ui:SymbolIconSource Symbol="Setting" />
+            </ui:SettingsExpander.IconSource>
+        </ui:SettingsExpander>
+
+        <ui:SettingsExpander x:Name="FrpcSourceExpander"
+                             Header="Frpc Release 获取来源"
+                             Description="GitHub / Gitee / GitLab 选择"
+                             IsClickEnabled="True"
+                             ActionIconSource="ChevronRight"
+                             Click="OnFrpcSourceClick">
+            <ui:SettingsExpander.IconSource>
+                <ui:SymbolIconSource Symbol="Cloud" />
+            </ui:SettingsExpander.IconSource>
+        </ui:SettingsExpander>
+
+        <ui:SettingsExpander Header="配置文件偏好" Description="隧道配置文件的默认选项（除端口IP）"
+                             IsClickEnabled="True" ActionIconSource="ChevronRight">
+            <ui:SettingsExpander.IconSource>
+                <ui:SymbolIconSource Symbol="Folder" />
+            </ui:SettingsExpander.IconSource>
+        </ui:SettingsExpander>
+
+        <ui:SettingsExpander Header="日志设置" Description="日志级别、输出路径、最大保留天数"
+                             IsClickEnabled="True" ActionIconSource="ChevronRight">
+            <ui:SettingsExpander.IconSource>
+                <ui:SymbolIconSource Symbol="Document" />
+            </ui:SettingsExpander.IconSource>
+        </ui:SettingsExpander>
+
+        <ui:SettingsExpander Header="隧道默认生命周期" Description="隧道开机自启、超时时间、重试次数"
+                             IsClickEnabled="True" ActionIconSource="ChevronRight">
+            <ui:SettingsExpander.IconSource>
+                <ui:SymbolIconSource Symbol="Globe" />
+            </ui:SettingsExpander.IconSource>
+        </ui:SettingsExpander>
+
+        <ui:SettingsExpander Header="通知设置" Description="隧道状态变更通知"
+                             IsClickEnabled="True" ActionIconSource="ChevronRight">
+            <ui:SettingsExpander.IconSource>
+                <ui:SymbolIconSource Symbol="Volume" />
+            </ui:SettingsExpander.IconSource>
+        </ui:SettingsExpander>
+
+        <ui:SettingsExpander Header="快捷键设置" Description="全局快捷键配置"
+                             IsClickEnabled="True" ActionIconSource="ChevronRight">
+            <ui:SettingsExpander.IconSource>
+                <ui:SymbolIconSource Symbol="Keyboard" />
+            </ui:SettingsExpander.IconSource>
+        </ui:SettingsExpander>
+
+        <ui:SettingsExpander Header="错误收集与隐私" Description="使用数据收集、错误报告"
+                             IsClickEnabled="True" ActionIconSource="ChevronRight">
+            <ui:SettingsExpander.IconSource>
+                <ui:SymbolIconSource Symbol="Permissions" />
+            </ui:SettingsExpander.IconSource>
+        </ui:SettingsExpander>
+
+        <ui:SettingsExpander Header="关于 ShapeFrp" Description="版本 1.0.0 · 检查更新"
+                             IsClickEnabled="True" ActionIconSource="ChevronRight">
+            <ui:SettingsExpander.IconSource>
+                <ui:SymbolIconSource Symbol="Flag" />
+            </ui:SettingsExpander.IconSource>
+        </ui:SettingsExpander>
+    </StackPanel>
+</ScrollViewer>
+</UserControl>

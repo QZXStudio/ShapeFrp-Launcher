@@ -6,73 +6,23 @@
              mc:Ignorable="d"
              x:Class="AvaloniaApplication1.Views.SettingsView">
 
+    <UserControl.Styles>
+        <Style Selector="ui|BreadcrumbBarItem TextBlock">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+    </UserControl.Styles>
+
     <Grid RowDefinitions="Auto,*">
         <Border Grid.Row="0" Padding="32,24,32,12">
             <StackPanel Spacing="2">
-                <TextBlock Text="设置" FontSize="20" FontWeight="SemiBold" />
-                <TextBlock Text="配置 QZXFrp 客户端的行为和偏好"
+                <ui:BreadcrumbBar x:Name="Breadcrumb" />
+                <TextBlock x:Name="PageDescription"
+                           Text="配置 QZXFrp 客户端的行为和偏好"
                            FontSize="13" Foreground="Gray" />
             </StackPanel>
         </Border>
 
-        <ScrollViewer Grid.Row="1">
-            <StackPanel Margin="16,0,32,32" Spacing="4">
-                <ui:SettingsExpander Header="通用设置" Description="语言、主题"
-                                     IsClickEnabled="True" ActionIconSource="ChevronRight">
-                    <ui:SettingsExpander.IconSource>
-                        <ui:SymbolIconSource Symbol="Setting" />
-                    </ui:SettingsExpander.IconSource>
-                </ui:SettingsExpander>
-
-                <ui:SettingsExpander Header="配置文件偏好" Description="隧道配置文件的默认选项（除端口IP）"
-                                     IsClickEnabled="True" ActionIconSource="ChevronRight">
-                    <ui:SettingsExpander.IconSource>
-                        <ui:SymbolIconSource Symbol="Folder" />
-                    </ui:SettingsExpander.IconSource>
-                </ui:SettingsExpander>
-
-                <ui:SettingsExpander Header="日志设置" Description="日志级别、输出路径、最大保留天数"
-                                     IsClickEnabled="True" ActionIconSource="ChevronRight">
-                    <ui:SettingsExpander.IconSource>
-                        <ui:SymbolIconSource Symbol="Document" />
-                    </ui:SettingsExpander.IconSource>
-                </ui:SettingsExpander>
-
-                <ui:SettingsExpander Header="隧道默认生命周期" Description="隧道开机自启、超时时间、重试次数"
-                                     IsClickEnabled="True" ActionIconSource="ChevronRight">
-                    <ui:SettingsExpander.IconSource>
-                        <ui:SymbolIconSource Symbol="Globe" />
-                    </ui:SettingsExpander.IconSource>
-                </ui:SettingsExpander>
-
-                <ui:SettingsExpander Header="通知设置" Description="隧道状态变更通知"
-                                     IsClickEnabled="True" ActionIconSource="ChevronRight">
-                    <ui:SettingsExpander.IconSource>
-                        <ui:SymbolIconSource Symbol="Volume" />
-                    </ui:SettingsExpander.IconSource>
-                </ui:SettingsExpander>
-
-                <ui:SettingsExpander Header="快捷键设置" Description="全局快捷键配置"
-                                     IsClickEnabled="True" ActionIconSource="ChevronRight">
-                    <ui:SettingsExpander.IconSource>
-                        <ui:SymbolIconSource Symbol="Keyboard" />
-                    </ui:SettingsExpander.IconSource>
-                </ui:SettingsExpander>
-
-                <ui:SettingsExpander Header="错误收集与隐私" Description="使用数据收集、错误报告"
-                                     IsClickEnabled="True" ActionIconSource="ChevronRight">
-                    <ui:SettingsExpander.IconSource>
-                        <ui:SymbolIconSource Symbol="Permissions" />
-                    </ui:SettingsExpander.IconSource>
-                </ui:SettingsExpander>
-
-                <ui:SettingsExpander Header="关于 ShapeFrp" Description="版本 1.0.0 · 检查更新"
-                                     IsClickEnabled="True" ActionIconSource="ChevronRight">
-                    <ui:SettingsExpander.IconSource>
-                        <ui:SymbolIconSource Symbol="Flag" />
-                    </ui:SettingsExpander.IconSource>
-                </ui:SettingsExpander>
-            </StackPanel>
-        </ScrollViewer>
+        <ui:Frame Grid.Row="1" x:Name="ContentFrame" />
     </Grid>
 </UserControl>
