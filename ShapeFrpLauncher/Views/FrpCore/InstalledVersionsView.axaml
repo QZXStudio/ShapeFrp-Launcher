@@ -1,0 +1,27 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             mc:Ignorable="d"
+             x:Class="AvaloniaApplication1.Views.FrpCore.InstalledVersionsView">
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- 子页面描述 -->
+    
+
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Margin="16,0,32,32" Spacing="4">
+                <!-- 当前默认版本 -->
+                <ui:SettingsExpander Header="v0.61.0 (当前默认)"
+                                     Description="frp v0.61.0 · 2024-11-15 · 已安装">
+                    <ui:SettingsExpander.IconSource>
+                        <ui:SymbolIconSource Symbol="Accept" />
+                    </ui:SettingsExpander.IconSource>
+                </ui:SettingsExpander>
+
+             
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
