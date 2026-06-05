@@ -1,8 +1,10 @@
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace AvaloniaApplication1.Models;
 
-public class ReleaseItem
+public class ReleaseItem : INotifyPropertyChanged
 {
     public string TagName { get; }
     public string Name { get; }
@@ -21,23 +23,31 @@ public class ReleaseItem
         }
         : "—";
 
+    private bool _isExpanded;
+    public bool IsExpanded
+    {
+        get => _isExpanded;
+        set
+        {
+            if (_isExpanded == value) return;
+            _isExpanded = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
     public ReleaseItem(Octokit.Release release, Octokit.ReleaseAsset? asset)
     {
         TagName = release.TagName;
         Name = release.Name ?? release.TagName;
         PublishedAt = release.PublishedAt ?? release.CreatedAt;
-        Body = TruncateBody(release.Body ?? "");
+        Body = release.Body ?? "";
         AssetName = asset?.Name;
         DownloadUrl = asset?.BrowserDownloadUrl;
         DownloadSize = asset?.Size;
-    }
-
-    private static string TruncateBody(string body, int maxLen = 200)
-    {
-        var firstLine = body.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-        var text = firstLine.Length > 0 ? firstLine[0].Trim() : "";
-        if (text.Length > maxLen)
-            text = text[..maxLen] + "…";
-        return text;
     }
 }
