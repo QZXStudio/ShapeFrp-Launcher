@@ -12,5 +12,21 @@
             <Setter Property="Foreground"
                     Value="{DynamicResource SystemAccentColor}" />
         </Style>
+
+        <!-- ComboBox 弹出菜单淡入动画（全局生效，透传 Popup 边界） -->
+        <Style Selector="ComboBox Popup Border">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity"
+                                      Duration="0:0:0.12"
+                                      Easing="CubicEaseOut" />
+                </Transitions>
+            </Setter>
+        </Style>
+
+        <!-- Tab 右侧内容区最大宽度，全屏时居中不顶满 -->
+        <Style Selector="ui|NavigationView ui|Frame">
+            <Setter Property="MaxWidth" Value="960" />
+        </Style>
     </Application.Styles>
 </Application>
